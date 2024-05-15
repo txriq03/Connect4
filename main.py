@@ -1,7 +1,7 @@
 import sys, random
-
+from modules.Menu import loadMenu
 
 
 
 if __name__=="__main__":
-    navigate_main_menu()
+    loadMenu()

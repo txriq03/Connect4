@@ -1,5 +1,7 @@
 from classes.MainMenu import MenuOption
 import sys
+from modules.Game import startGame
+
 menuScreen: str = """
 _________                                     __     _____  
 \_   ___ \  ____   ____   ____   ____   _____/  |_  /  |  | 
@@ -31,9 +33,10 @@ def branchToFeature(opt: MenuOption):
     match opt:
         case MenuOption.VsComputer:
             print("VsComputer selected")
+            startGame()
         case MenuOption.VsPlayer:
             print("VsPlayer selected")
-
+            startGame()
         case MenuOption.Leaderboard:
             print("Leaderboard selected.")
 

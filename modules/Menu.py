@@ -2,7 +2,7 @@ from classes.MainMenu import MenuOption
 import sys
 from modules.Game import startGame
 
-menuScreen: str = """
+menuScreen: str = r"""
 _________                                     __     _____  
 \_   ___ \  ____   ____   ____   ____   _____/  |_  /  |  | 
 /    \  \/ /  _ \ /    \ /    \_/ __ \_/ ___\   __\/   |  |_  

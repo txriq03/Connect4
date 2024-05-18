@@ -7,23 +7,22 @@ def generateBoard():
         ["", "", "", "", "", "", ""],
         ["", "", "", "", "", "", ""],
         ["", "", "", "", "", "", ""],
-        ["", "", "", "", "🔴", "🔵", ""],
+        ["", "", "", "", "", "", ""],
         ["", "", "", "", "", "", ""]
     ]
 
     return board
 
 def startGame():
-    printBoard()
-    handleGame()
+    board = generateBoard()
+    printBoard(board)
+    handleGame(board)
 
-def printBoard():
+def printBoard(board):
     # loop through rows
     for x in range(6):
         print("\n+----+----+----+----+----+----+----+")
         print("|", end="")
-
-        board = generateBoard()
 
         # loop through columns
         for y in range(7):
@@ -35,11 +34,11 @@ def printBoard():
 
     print("\n+----+----+----+----+----+----+----+\n")
 
-def isEmpty(col: int, board: list[str][str]) -> bool:
+def isEmpty(col: int, board) -> bool:
     return board[0][col] == ""
 
 # Find the next open slot in the 
-def nextOpenSlot(board: list[str][str], col: int) -> int:
+def nextOpenSlot(board, col: int) -> int:
 
     """
     For loop starts at the end of an array,
@@ -51,19 +50,20 @@ def nextOpenSlot(board: list[str][str], col: int) -> int:
 
 # Get column from the user
 def getCol(playerTurn: int) -> int:
+    validCols = ["1", "2", "3", "4", "5", "6", "7"]
     if playerTurn == 1:
         player = "One"
     else:
         player = "Two"
 
     while True:
-        col = int(input(f"Player {player}: "))
-        if (col <= 7 or col >= 1):
-            return col - 1j
+        col = input(f"Player {player}: ")
+        if (col in validCols):
+            col = int(col) - 1
+            return col
         else:
             print("Please input a valid column.", file=sys.stderr)
         
-
 # Check which player's turn it is
 def playerTurn(turn: int) -> int:
     if (turn % 2 != 0):
@@ -71,32 +71,35 @@ def playerTurn(turn: int) -> int:
     else:
         return 2
     
-def dropToken(board: list[str][str], player: int, row: int, col: int) -> None:
+def dropToken(board, player: int, row: int, col: int):
         if (player == 1):
-            board[row][col] == "🔴"
+            board[row][col] = "🔴"
         else:
-            board[row][col] == "🔵"
+            board[row][col] = "🔵"
         
-
-def handleGame():
+def handleGame(board):
     turn = 1
-    end_game = False
-    board = generateBoard()
+    endGame = False
 
     print("Players need to enter a column between 1 and 7.")
-    while end_game == False:
+    while endGame == False:
         if (playerTurn(turn) == 1):
             col = getCol(1)
         else:
             col = getCol(2)
     
-    # Check if space is empty
-    if (isEmpty(col, board)):
-        row = nextOpenSlot(board, col)
+        # Check if space is empty
+        if (isEmpty(col, board)):
+            row = nextOpenSlot(board, col)
 
-        # Higher order function
-        dropToken(board, playerTurn(turn), row, col)
-    
+            # Higher order function
+            dropToken(board, playerTurn(turn), row, col)
+            printBoard(board)
+            turn += 1
+
+        else:
+            print("Column is already filled with tokens.")
+        
 
     
 

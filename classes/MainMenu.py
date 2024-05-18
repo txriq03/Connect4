@@ -11,9 +11,9 @@ class MenuOption(Enum):
     def parse(opt: str) -> Optional['MenuOption']:
         match opt.lower():
             case "1":
-                return MenuOption.VsComputer
-            case "2":
                 return MenuOption.VsPlayer
+            case "2":
+                return MenuOption.VsComputer
             case "3":
                 return MenuOption.Leaderboard
             case "4" | "q":

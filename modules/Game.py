@@ -13,10 +13,10 @@ def generateBoard():
 
     return board
 
-def startGame():
+def startGame(isMulti: bool):
     board = generateBoard()
     printBoard(board)
-    handleGame(board)
+    handleGame(board, isMulti)
 
 def printBoard(board):
     # loop through rows
@@ -76,30 +76,69 @@ def dropToken(board, player: int, row: int, col: int):
             board[row][col] = "🔴"
         else:
             board[row][col] = "🔵"
-        
-def handleGame(board):
+
+def checkForWin(board, token):
+    falseConnect = False
+
+    # Check horizontally
+    """
+    Only 4 horizontal connections can be made
+    in the horizontal plane
+    In all 6 rows
+    """
+    for col in range(4):
+        for row in range(6):
+            doesConnect = board[row][col] == token and board[row][col+1] == token and board[row][col+2] == token and board[row][col+3] == token
+            return doesConnect
+    
+    # Check vertically
+    """
+    Vertical connections can be made in all 7 columns
+    But only 3 possible connections in that column
+    """
+    for col in range(7):
+        for row in range(3):
+            doesConnect = board[row][col] and board[row+1][col] and board[row+2][col] and board[row+3][col]
+            return doesConnect
+    
+    # Check positive diagnol
+    for col in range(4):
+        for row in range(3):
+            doesConnect = board[row][col] and board[row-1][col+1] and board[row-2][col+2] and board[row-3][col+3]
+            return doesConnect
+    
+    # Check negative diagnol
+    for col in range(4):
+        for row in range(3, 6):
+            doesConnect = board[row][col] and board[row-1][col+1] and board[row-2][col+2] and board[row-3][col+3]
+            return doesConnect
+
+def handleGame(board, isMulti):
     turn = 1
     endGame = False
 
     print("Players need to enter a column between 1 and 7.")
     while endGame == False:
-        if (playerTurn(turn) == 1):
-            col = getCol(1)
-        else:
-            col = getCol(2)
-    
-        # Check if space is empty
-        if (isEmpty(col, board)):
-            row = nextOpenSlot(board, col)
 
-            # Higher order function
-            dropToken(board, playerTurn(turn), row, col)
-            printBoard(board)
-            turn += 1
-
-        else:
-            print("Column is already filled with tokens.")
+        # Check if game mode is multiplayer
+        if isMulti:
+            if (playerTurn(turn) == 1):
+                col = getCol(1)
+            else:
+                col = getCol(2)
         
+            # Check if space is empty
+            if (isEmpty(col, board)):
+                row = nextOpenSlot(board, col)
 
-    
+                # Drop the token and increment turn
+                dropToken(board, playerTurn(turn), row, col)
+                printBoard(board)
+                turn += 1
 
+            else:
+                print("Column is already filled with tokens.")
+
+        else:
+            print("Computer game started.")
+            break

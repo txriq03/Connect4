@@ -31,12 +31,12 @@ def loadMenu():
 
 def branchToFeature(opt: MenuOption):
     match opt:
-        case MenuOption.VsComputer:
-            print("VsComputer selected")
-            startGame()
         case MenuOption.VsPlayer:
             print("VsPlayer selected")
-            startGame()
+            startGame(True)
+        case MenuOption.VsComputer:
+            print("VsComputer selected")
+            startGame(False)
         case MenuOption.Leaderboard:
             print("Leaderboard selected.")
 

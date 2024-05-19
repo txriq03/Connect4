@@ -77,48 +77,42 @@ def dropToken(board, player: int, row: int, col: int):
         else:
             board[row][col] = "🔵"
 
-def checkForWin(board, token):
-    falseConnect = False
-
-    # Check horizontally
-    """
-    Only 4 horizontal connections can be made
-    in the horizontal plane
-    In all 6 rows
-    """
-    for col in range(4):
-        for row in range(6):
-            doesConnect = board[row][col] == token and board[row][col+1] == token and board[row][col+2] == token and board[row][col+3] == token
-            return doesConnect
+def checkForWin(board, token: str) -> bool:
+    rows = 6
+    cols = 7
+    
+     # Check horizontally
+    for r in range(rows):
+        for c in range(cols - 3):
+            if board[r][c] == token and board[r][c+1] == token and board[r][c+2] == token and board[r][c+3] == token:
+                return True
     
     # Check vertically
-    """
-    Vertical connections can be made in all 7 columns
-    But only 3 possible connections in that column
-    """
-    for col in range(7):
-        for row in range(3):
-            doesConnect = board[row][col] and board[row+1][col] and board[row+2][col] and board[row+3][col]
-            return doesConnect
-    
-    # Check positive diagnol
-    for col in range(4):
-        for row in range(3):
-            doesConnect = board[row][col] and board[row-1][col+1] and board[row-2][col+2] and board[row-3][col+3]
-            return doesConnect
-    
-    # Check negative diagnol
-    for col in range(4):
-        for row in range(3, 6):
-            doesConnect = board[row][col] and board[row-1][col+1] and board[row-2][col+2] and board[row-3][col+3]
-            return doesConnect
+    for c in range(cols):
+        for r in range(rows - 3):
+            if board[r][c] == token and board[r+1][c] == token and board[r+2][c] == token and board[r+3][c] == token:
+                return True
+            
+    # Check positive diagonal (bottom-left to top-right)
+    for r in range(rows - 3):
+        for c in range(cols - 3):
+            if board[r][c] == token and board[r+1][c+1] == token and board[r+2][c+2] == token and board[r+3][c+3] == token:
+                return True
+            
+    # Check negative diagonal (top-left to bottom-right)
+    for r in range(3, rows):
+        for c in range(cols - 3):
+            if board[r][c] == token and board[r-1][c+1] == token and board[r-2][c+2] == token and board[r-3][c+3] == token:
+                return True
+            
+    return False
 
 def handleGame(board, isMulti):
     turn = 1
     endGame = False
 
     print("Players need to enter a column between 1 and 7.")
-    while endGame == False:
+    while not endGame:
 
         # Check if game mode is multiplayer
         if isMulti:
@@ -133,9 +127,18 @@ def handleGame(board, isMulti):
 
                 # Drop the token and increment turn
                 dropToken(board, playerTurn(turn), row, col)
-                printBoard(board)
-                turn += 1
-
+                
+                # doesConnect = checkForWin(board, "🔴")
+                
+                if checkForWin(board, "🔴"):
+                    print("Player One wins!")
+                    endGame = True
+                elif checkForWin(board, "🔵"):
+                    print("Player Two wins!")
+                else:
+                    printBoard(board)   
+                    turn += 1
+                
             else:
                 print("Column is already filled with tokens.")
 

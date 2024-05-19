@@ -34,9 +34,11 @@ def branchToFeature(opt: MenuOption):
         case MenuOption.VsPlayer:
             print("VsPlayer selected")
             startGame(True)
+            loadMenu()
         case MenuOption.VsComputer:
             print("VsComputer selected")
             startGame(False)
+            loadMenu
         case MenuOption.Leaderboard:
             print("Leaderboard selected.")
 
